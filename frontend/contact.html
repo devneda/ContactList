@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Contacto</title>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Detalles del Contacto</h2>
+        <form id="contact-form">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="apellidos">Apellidos</label>
+                <input type="text" id="apellidos" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="text" id="telefono" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="foto">Foto</label>
+                <input type="file" id="foto" class="form-control">
+                <img id="preview" src="" width="100" class="mt-2">
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Guardar</button>
+            <a href="index.html" class="btn btn-secondary mt-3">Volver</a>
+        </form>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // Obtener detalles del contacto y rellenar el formulario
+        const params = new URLSearchParams(window.location.search);
+        const contactId = params.get('id');
+
+        async function loadContact() {
+            const response = await fetch(`http://localhost:3000/api/contacts/${contactId}`);
+            const contact = await response.json();
+
+            document.getElementById('nombre').value = contact.nombre;
+            document.getElementById('apellidos').value = contact.apellidos;
+            document.getElementById('telefono').value = contact.telefono;
+            document.getElementById('email').value = contact.email;
+            document.getElementById('preview').src = contact.foto;
+        }
+        loadContact();
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Contactos</title>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Gestor de Contactos</a>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Lista de Contactos</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="contacts-list">
+                <!-- Contactos se llenarán dinámicamente con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        async function loadContacts() {
+            const response = await fetch('http://localhost:3000/api/contacts');
+            const contacts = await response.json();
+            const tbody = document.getElementById('contacts-list');
+            tbody.innerHTML = '';
+            contacts.forEach(contact => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${contact.foto}" width="50"></td>
+                        <td>${contact.nombre} ${contact.apellidos}</td>
+                        <td>${contact.telefono}</td>
+                        <td>${contact.email}</td>
+                        <td>
+                            <button class="btn btn-primary">Editar</button>
+                            <button class="btn btn-danger">Eliminar</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        loadContacts();
+    </script>
+</body>
+</html>

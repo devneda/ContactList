@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Contacto</title>
+    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Agregar Nuevo Contacto</h2>
+        <form id="add-contact-form">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="apellidos">Apellidos</label>
+                <input type="text" id="apellidos" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="text" id="telefono" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="foto">Foto</label>
+                <input type="file" id="foto" class="form-control">
+                <img id="preview" src="" width="100" class="mt-2">
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Guardar</button>
+            <a href="index.html" class="btn btn-secondary mt-3">Volver</a>
+        </form>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.getElementById('foto').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                document.getElementById('preview').src = URL.createObjectURL(file);
+            }
+        });
+
+        document.getElementById('add-contact-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('nombre', document.getElementById('nombre').value);
+            formData.append('apellidos', document.getElementById('apellidos').value);
+            formData.append('telefono', document.getElementById('telefono').value);
+            formData.append('email', document.getElementById('email').value);
+            const foto = document.getElementById('foto').files[0];
+            if (foto) {
+                formData.append('foto', foto);
+            }
+
+            const response = await fetch('http://localhost:3000/api/contacts', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                window.location.href = 'index.html';
+            } else {
+                alert('Error al guardar el contacto');
+            }
+        });
+    </script>
+</body>
+</html>
